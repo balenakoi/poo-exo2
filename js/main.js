@@ -1,75 +1,51 @@
-var Personnage = {
-    // Initialize the character
-    initPerso: function (name, live, force) {
+class fighters {
+
+    constructor(name, life, force) {
         this.name = name;
-        this.live = live;
+        this.life = life;
         this.force = force;
-    },
-    // Attack a target character
-    attaquer: function (cible) {
-        if (this.live > 0) {
-            var degats = this.force;
-            alert(this.name + " attaque " + cible.name + " et lui fait " + degats + " points de dégâts");
-            cible.live = cible.live - degats;
-            if (cible.live > 0) {
-                alert(cible.name + " a encore " + cible.live + " points de vie");
-            } else {
-                cible.live = 0;
-                alert(cible.name + " est mort !");
+    };
+    attaquer(cible) {
+        if (this.life > 0 && cible.life > 0) {
+            if (cible.life > 0) {
+                console.log(this.name + " attaque " + cible.name + " et lui fait " + this.force + " points de dégâts");
+                cible.life = cible.life - this.force;
+                console.log(cible.name + " a encore " + cible.life + " points de vie");
             }
-        } else {
-            alert(this.name + " ne peut pas attaquer : il est mort...");
+            if (cible.life <= 0) {
+                console.log(this.name + " a tué " + adversaire.name);
+            }
+        }
+    }
+    Heal() {
+        if (this.life > 0) {
+            if (this.magic >= 20) {
+                if (this.life < 120) {
+                    console.log(this.name + " se heal. Il gagne " + this.heal + " hp.");
+                    this.magic = this.magic - 20;
+                    this.life = this.life + this.heal;
+                    console.log("Il lui reste " + this.life + " hp.");
+                }
+            } else {
+                console.log(this.name + " ne peut pas se heal, il n'as plus assez de magie.");
+            }
         }
     }
 };
 
-var Joueur = Object.create(Personnage);
-// Initializes the player
-Joueur.initJoueur = function (name, live, force) {
-    this.initPerso(name, live, force);
-};
-// Returns the player description
-Joueur.decrire = function () {
-    var description = this.name + " a " + this.live + " points de vie, " +
-        this.force + " en force, ";
-    return description;
-};
-// Fights an opponent
-Joueur.combattre = function (adversaire) {
-    this.attaquer(adversaire);
-    if (adversaire.live === 0) {
-        alert(this.name + " a tué " + adversaire.name  );
+class magic extends fighters {
+    constructor(name, life, force, heal, magic) {
+        super(name, life, force);
+        this.heal = heal;
+        this.magic = magic;
     }
-};
+}
 
-var Adversaire = Object.create(Personnage);
-// Initialize the opponent's properties
-Adversaire.initAdversaire = function (name, live, force, race, valeur) {
-    this.initPerso(name, live, force);
-    this.race = race;
-    this.valeur = valeur;
-};
+let joueur1 = new fighters("Guerrier Joueur", 150, 25);
+let joueur2 = new fighters("Guerrier Allier", 130, 30);
+var Adversaire = new magic("Magicien", 120, 50, 10, 100);
 
-var joueur1 = Object.create(Joueur);
-joueur1.initJoueur("player1", 150, 25);
-
-var joueur2 = Object.create(Joueur);
-joueur2.initJoueur("player2", 130, 30);
-
-alert("Bienvenue dans ce jeu d'aventure ! Voici nos courageux héros :");
-alert(joueur1.decrire());
-alert(joueur2.decrire());
-
-var monstre = Object.create(Adversaire);
-monstre.initAdversaire("magic", 40, 20, 10);
-
-alert("Un affreux monstre arrive : c'est un " + monstre.race + " namemé " + monstre.name);
-
-monstre.attaquer(joueur1);
-monstre.attaquer(joueur2);
-
-joueur1.combattre(monstre);
-joueur2.combattre(monstre);
-
-alert(joueur1.decrire());
-alert(joueur2.decrire());
+joueur1.attaquer(Adversaire);
+joueur2.attaquer(Adversaire);
+Adversaire.Heal();
+Adversaire.attaquer(joueur1);
